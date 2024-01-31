@@ -1,0 +1,14 @@
+﻿@model Role
+<form class="w-50"method="post" asp-action="AddRole">
+    <div class="input-group mt-5">
+        <input placeholder="Role Name.." class="form-control" asp-for="Name" />
+        <div class="input-group-append">
+            <button type="submit" class="btn bg-primary">
+                Add New Role
+            </button>
+
+        </div>
+    </div>
+    <span asp-validation-for="Name" class="text-danger"></span>
+
+</form>

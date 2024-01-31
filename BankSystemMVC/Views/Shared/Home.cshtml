@@ -1,0 +1,23 @@
+﻿@model LoginVM
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@using Newtonsoft.Json;
+
+
+<h3>Actions</h3>
+@{
+    var data = JsonConvert.DeserializeObject<LoginVM>(HttpContextAccessor.HttpContext.Session.GetString("data"));
+
+}
+@if (data.RoleId== 1)
+{
+    <a class="btn btn-primary" href="/User/AddUser" role="button">Add User</a>
+    <a class="btn btn-primary" href="/Role/AllRoles" role="button">View Roles</a>
+    <a class="btn btn-primary" href="/Admin/AllEmployees" role="button">View Employees</a>
+}
+else if(data.RoleId==2){
+    <a class="btn btn-primary" href="/Employee/AddEmployee" role="button">Add Employee</a>
+}
+else
+{
+    <a class="btn btn-primary" href="/Employee/AllEmployees" role="button">View Employees</a>
+}

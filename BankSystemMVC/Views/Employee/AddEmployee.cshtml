@@ -1,0 +1,98 @@
+﻿@model Employees
+<h3 class="mb-3">Add Employee</h3>
+<p class="ErrorMessage">@ViewBag.Message</p>
+<form method="post" action="AddEmployee" controller="Employee">
+    <div class="form-group mb-2">
+        <label asp-for="EmpName">Name</label>
+        <input type="text" class="form-control" asp-for="EmpName" placeholder="Employee Name">
+        <span asp-validation-for="EmpName" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-2">
+        <label asp-for="Salary">Salary </label>
+        <input type="number" class="form-control" asp-for="Salary" placeholder="Employee Salary">
+        <span asp-validation-for="Salary" class="text-danger"></span>
+
+    </div>
+    <div class="form-group mb-2">
+        <label asp-for="SSN">SSN</label>
+        <input type="text" class="form-control" asp-for="SSN" placeholder="Employee SSN" >
+        <span asp-validation-for="SSN" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="GovernorateId" class="form-label">Governorates</label>
+        <select class="form-select" asp-for="GovernorateId">
+            <option></option>
+        </select>
+    </div>    
+    <div class="mb-3">
+        <label asp-for="VillageId" class="form-label">Villages</label>
+        <select class="form-select" asp-for="VillageId">
+            <option></option>
+        </select>
+    </div>   
+    <div class="mb-3">
+        <label asp-for="RegionId" class="form-label">Regions</label>
+        <select class="form-select" asp-for="RegionId">
+            <option></option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            BuildDropDown('GovernorateId', '/Employee/GetAllGovernorates', 'Choose');
+            $('#GovernorateId').change(function () {
+                BuildDropDownBasedOnSelection('GovernorateId', 'VillageId', '/Employee/GetVillage?GovernorateId=', 'Choose')
+
+            });
+            $('#VillageId').change(function () {
+                BuildDropDownBasedOnSelection('VillageId', 'RegionId', '/Employee/GetRegion?VillageId=', 'Choose')
+
+            });
+        });
+
+        function BuildDropDown(dropdownId, url, Message) {
+
+            $.ajax({
+                type: "Get",
+                url: url,
+                success: function (results) {
+                    $("#" + dropdownId + '').empty();
+                    $("#" + dropdownId + '').append($('<option selected></option>').attr('value', 0).text(Message));
+
+                    $.each(results, function (i, result) {
+
+                        $("#" + dropdownId + '').append($('<option></option>').attr('value', result.id).text(result.name));
+
+
+                    });
+                }
+            });
+        }
+        function BuildDropDownBasedOnSelection(dropdownId, subDropDownId, url, message) {
+
+            var subDropDown = $('#' + subDropDownId + '');
+            var superDropDown = $('#' + dropdownId + '').val();
+            subDropDown.empty();
+            $.ajax({
+                type: "Get",
+                url: url + superDropDown + "",
+                success: function (results) {
+                    subDropDown.append($('<option></option>').attr('value', 0).text(message));
+                    $.each(results, function (i, result) {
+
+
+                        subDropDown.append($('<option></option>').attr('value', result.id).text(result.name));
+
+
+                    });
+                }
+
+            });
+        }
+    </script>
+     
+}

@@ -1,0 +1,69 @@
+﻿@model AddUserVM
+<h3 class="mb-3">Add User</h3>
+<p class="ErrorMessage">@ViewBag.Message</p>
+<form method="post" action="AddUser" controller="User">
+    <div class="form-group mb-2">
+        <label asp-for="UserName">UserName</label>
+        <input type="text" class="form-control" asp-for="UserName" placeholder="Enter UserName" >
+        <span asp-validation-for="UserName" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-2">
+        <label asp-for="Email">Email </label>
+        <input type="email" class="form-control" asp-for="Email" placeholder="Enter email">
+        <span asp-validation-for="Email" class="text-danger"></span>
+
+    </div>
+    <div class="form-group mb-2">
+        <label asp-for="PhoneNumber">PhoneNumber </label>
+        <input type="text" class="form-control" asp-for="PhoneNumber" placeholder="Enter Phone Number">
+    </div>
+        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+    <div class="form-group mb-2">
+        <label asp-for="Password">Password</label>
+        <input type="password" class="form-control" asp-for="Password" placeholder="Enter Password">
+    </div>
+        <span asp-validation-for="Password" class="text-danger"></span>
+    <div class="form-group mb-2">
+        <label asp-for="ConfirmPassword">Confirm Password</label>
+        <input type="password" class="form-control" asp-for="ConfirmPassword" placeholder="Enter ConfirmPassword">
+    </div>
+        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+    <div class="mb-3">
+        <label asp-for="RoleId" class="form-label">Roles</label>
+        <select class="form-select" asp-for="RoleId">
+            <option></option>
+        </select>
+    </div>
+   
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        $(document).ready(function () {
+            BuildDropDown('RoleId','/user/GetRoles','choose')
+
+        });
+         function BuildDropDown(dropdownId, url, Message) {
+
+            $.ajax({
+                type: "Get",
+                url: url,
+                success: function (results) {
+                    $("#" + dropdownId + '').empty();
+                    $("#" + dropdownId + '').append($('<option selected></option>').attr('value', 0).text(Message));
+
+                    $.each(results, function (i, result) {
+
+                        $("#" + dropdownId + '').append($('<option></option>').attr('value', result.id).text(result.name));
+
+
+                    });
+                }
+            })
+        }
+
+
+    </script>
+}

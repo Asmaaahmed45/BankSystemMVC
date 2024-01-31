@@ -1,0 +1,13 @@
+﻿@model EmpVM
+<h4 class="mb-3">Employee Details</h4>
+<div class="card alert-light line w-50">
+    <div class="card-body">
+        <h5 class="card-title ">@(Model.EmpName.ToUpper()) Detail's</h5>
+        <p class="card-text"> Salary: @Model.Salary</p>
+        <p class="card-text"> SSN: @Model.SSN</p>
+        <p class="card-text"> Governorate: @Model.Governorate</p>
+        <p class="card-text"> Village: @Model.Village</p>
+        <p class="card-text"> Region: @Model.Region</p>
+        <a href="Report?id=@Model.EmpId" class="btn btn-primary">PDF</a>
+    </div>
+</div>

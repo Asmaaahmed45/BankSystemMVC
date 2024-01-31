@@ -1,0 +1,16 @@
+﻿@model LoginVM
+<h3 class="mb-3">Login</h3>
+<p class="ErrorMessage">@ViewBag.Message</p>
+<form class="w-50" method="post" action="Login" controller="User">
+    <div class="form-group mb-2">
+        <label asp-for="UserName">UserName</label>
+        <input type="text" class="form-control" asp-for="UserName" placeholder="Enter UserName">
+        <span asp-validation-for="UserName" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-2">
+        <label asp-for="Password">Password</label>
+        <input type="password" class="form-control" asp-for="Password" placeholder="Enter Password">
+    </div>
+        <span asp-validation-for="Password" class="text-danger"></span>
+    <button type="submit" class="btn btn-primary">Login</button>
+</form>

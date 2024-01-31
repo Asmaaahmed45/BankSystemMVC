@@ -1,0 +1,97 @@
+﻿@model Employees
+<h1>Edit Employee</h1>
+<form method="post" action="EditEmployee" class="mt-5">
+    <div class="mb-3">
+        <label for="InputID" class="form-label">ID</label>
+        <input type="text" class="form-control" id="InputID" asp-for="EmpId" readonly>
+    </div>
+    <div class="mb-3">
+        <label for="InputName" class="form-label">Name</label>
+        <input type="text" class="form-control" id="InputName" asp-for="EmpName">
+        <span asp-validation-for="EmpName" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label for="InputSalary" class="form-label">Salary</label>
+        <input type="number" class="form-control" id="InputSalary" asp-for="Salary">
+        <span asp-validation-for="Salary" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label for="InputSSN" class="form-label">SSN</label>
+        <input type="text" class="form-control" id="InputSSN" asp-for="SSN">
+        <span asp-validation-for="SSN" class="text-danger"></span>
+    </div>
+   <div class="mb-3">
+        <label asp-for="GovernorateId" class="form-label">Governorates</label>
+        <select class="form-select" asp-for="GovernorateId">
+            <option></option>
+            <option value="@Model.GovernorateId">@ViewBag.Governorate</option>
+
+        </select>
+    </div>
+    <div class="mb-3">
+        <label asp-for="VillageId" class="form-label">Villages</label>
+        <select class="form-select" asp-for="VillageId">
+            <option></option>
+            <option value="@Model.VillageId">@ViewBag.Village</option>
+
+        </select>
+    </div>
+    <div class="mb-3">
+        <label asp-for="RegionId" class="form-label">Regions</label>
+        <select class="form-select" asp-for="RegionId">
+            <option></option>
+            
+            <option value="@Model.RegionId">@ViewBag.Region</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            BuildDropDown('GovernorateId', '/Employee/GetAllGovernorates', 'Choose', '@Model.GovernorateId');
+            $('#GovernorateId').change(function () {
+                BuildDropDownBasedOnSelection('GovernorateId', 'VillageId', '/Employee/GetVillage?GovernorateId=', 'Choose', '@Model.VillageId')
+            });
+            $('#VillageId').change(function () {
+                BuildDropDownBasedOnSelection('VillageId', 'RegionId', '/Employee/GetRegion?VillageId=', 'Choose', '@Model.VillageId')
+
+            });
+        });
+
+        function BuildDropDown(dropdownId, url, Message, selectedValue) {
+            $.ajax({
+                type: "Get",
+                url: url,
+                success: function (results) {
+                    $("#" + dropdownId + '').empty();
+                    $("#" + dropdownId + '').append($('<option></option>').attr('value', 0).text(Message));
+                    $.each(results, function (i, result) {
+                        $("#" + dropdownId + '').append($('<option></option>').attr('value', result.id).text(result.name));
+                    });
+                    $("#" + dropdownId + '').val(selectedValue);
+                }
+            });
+        }
+
+        function BuildDropDownBasedOnSelection(dropdownId, subDropDownId, url, message, selectedValue) {
+            var subDropDown = $('#' + subDropDownId + '');
+            var superDropDown = $('#' + dropdownId + '').val();
+            subDropDown.empty();
+            $.ajax({
+                type: "Get",
+                url: url + superDropDown + "",
+                success: function (results) {
+                    subDropDown.append($('<option></option>').attr('value', 0).text(message));
+                    $.each(results, function (i, result) {
+                        subDropDown.append($('<option></option>').attr('value', result.id).text(result.name));
+                    });
+                    subDropDown.val(selectedValue);
+                }
+            });
+        }
+    </script>
+}

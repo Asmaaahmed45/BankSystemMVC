@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Employees>
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@using Newtonsoft.Json;
+@{
+    var data = JsonConvert.DeserializeObject<LoginVM>(HttpContextAccessor.HttpContext.Session.GetString("data"));
+
+}
+<h1>All Employees</h1>
+<table class="table mt-5 table-striped table-hover table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var employee in Model)
+        {
+            <tr>
+                <td>@employee.EmpId</td>
+                <td>@employee.EmpName</td>
+                @if (data.RoleId == 1)
+                {
+                    <td><a class="btn btn-primary" href="EmployeeDetails?Id=@employee.EmpId" role="button">Details</a></td>
+
+                }else if (data.RoleId == 3)
+                {
+                    
+                    <td><a class="btn btn-danger" href="DeleteEmployee?Id=@employee.EmpId" role="button">Delete</a></td>
+                    <td><a class="btn btn-primary" href="EditEmployee?Id=@employee.EmpId" role="button">Edit</a></td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
